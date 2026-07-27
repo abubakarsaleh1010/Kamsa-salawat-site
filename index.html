@@ -51,7 +51,20 @@
   .navlinks{display:flex; gap:32px; font-size:0.85rem; letter-spacing:0.03em; text-transform:uppercase;}
   .navlinks a{opacity:0.75; transition:opacity .25s;}
   .navlinks a:hover{opacity:1;}
-  @media (max-width:720px){ .navlinks{display:none;} }
+  .hamburger{
+    display:none; flex-direction:column; justify-content:center; gap:5px;
+    width:34px; height:34px; background:none; border:none; cursor:pointer; padding:6px; z-index:60;
+  }
+  .hamburger span{ width:100%; height:2px; background:var(--gold-bright); display:block; border-radius:2px; }
+  @media (max-width:720px){
+    .navlinks{
+      display:none; position:fixed; top:64px; right:20px; left:20px;
+      background:var(--bg-emerald-2); border:1px solid var(--line); border-radius:4px;
+      flex-direction:column; align-items:center; gap:18px; padding:24px; z-index:55;
+    }
+    .navlinks.open{ display:flex; }
+    .hamburger{ display:flex; }
+  }
 
   .hero{
     position:relative;
@@ -210,7 +223,6 @@
   }
   .toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
   .note{font-size:0.75rem; color:rgba(244,239,226,0.4); margin-top:18px; font-style:italic;}
-  .given-row{margin-top:26px;}
 
   .faq-item{border-bottom:1px solid var(--line); padding:22px 0;}
   .faq-item summary{cursor:pointer; list-style:none; display:flex; justify-content:space-between; align-items:center; font-size:1.05rem; color:var(--ivory); font-weight:600;}
@@ -296,18 +308,24 @@
     .modal-card{padding:36px 24px;}
   }
   img{max-width:100%; height:auto;}
+    to{ transform:rotateY(360deg); }
+  }
 </style>
 </head>
 <body>
 
 <nav>
   <div class="brand">Zone D 2 Muslim Ummah <span>· Expansion</span></div>
-  <div class="navlinks">
+  <div class="navlinks" id="navlinks">
     <a href="#story">The Need</a>
+    <a href="#vision">The Vision</a>
     <a href="#progress">Progress</a>
     <a href="#tiers">Give a Tier</a>
     <a href="#donate">Donate</a>
   </div>
+  <button class="hamburger" id="hamburger-btn" aria-label="Open menu">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
 
 <section class="hero" id="hero-section">
@@ -431,25 +449,23 @@
       <h3>Support the expansion</h3>
       <p>Tap the account number below to copy it, then transfer directly from your bank app. Every naira goes toward construction — no amount is too small.</p>
       <div class="bank-details">
-        <div class="row"><span>Account Name</span><b>[ Placeholder — Zone D 2 Muslim Ummah Building Fund ]</b></div>
-        <div class="row"><span>Bank</span><b>[ Placeholder Bank Name ]</b></div>
+        <div class="row"><span>Account Name</span><b>Apo Zone D 2nd Gate Ummah Mosque</b></div>
+        <div class="row"><span>Bank</span><b>Jaiz Bank</b></div>
       </div>
-      <div class="account-copy" id="account-copy" data-account="0000000000">
+      <div class="account-copy" id="account-copy" data-account="0015090656">
         <div>
           <div class="ac-label">Account Number — tap to copy</div>
-          <div class="ac-number">0000000000</div>
+          <div class="ac-number">0015090656</div>
         </div>
         <div class="copy-hint">⧉ Copy</div>
       </div>
-      <div class="given-row">
-        <button id="given-btn" class="btn btn-gold">Donate</button>
-      </div>
-      <p class="note">Account details above are placeholders — swap in the real ones before publishing.</p>
+      <p class="note">Tap the account number to copy it — you're all set to transfer.</p>
     </div>
   </div>
 </section>
 
 <section>
+      
   <div class="wrap" style="max-width:760px;">
     <div class="section-head">
       <div class="eyebrow-line"><span>Questions</span></div>
@@ -465,7 +481,7 @@
     </details>
     <details class="faq-item">
       <summary>Is there a way to dedicate my gift (sadaqah jariyah) to a loved one?</summary>
-      <p>Yes — let us know when you give and we'll record it in the masjid's donor and dedication register.</p>
+      <p>Yes — just speak with the imam or the committee about it.</p>
     </details>
     <details class="faq-item">
       <summary>Who oversees the funds?</summary>
@@ -477,7 +493,7 @@
 <footer>
   <div class="wrap">
     <span class="brand">Zone D 2 Muslim Ummah <span>· Expansion Campaign</span></span>
-    <p>[ Placeholder address ] · [ Placeholder phone ] · [ Placeholder email ]</p>
+    <p>Building Committee — Bello Kassim: 08065781618 · Abdulfatah Sa'ad: 08037005559</p>
     <div class="foot-links">
       <a href="#story">The Need</a>
       <a href="#progress">Progress</a>
@@ -674,33 +690,20 @@ async function fetchProgressPercent(){
   els.forEach(el=>io.observe(el));
 })();
 
-/* ---------- Tap-to-copy account number ---------- */
+/* ---------- Hamburger menu ---------- */
 (function(){
-  const box = document.getElementById('account-copy');
-  const toast = document.getElementById('copy-toast');
-
-  box.addEventListener('click', async ()=>{
-    const num = box.dataset.account;
-    try{
-      await navigator.clipboard.writeText(num);
-    }catch(e){
-      const temp = document.createElement('textarea');
-      temp.value = num;
-      document.body.appendChild(temp);
-      temp.select();
-      document.execCommand('copy');
-      document.body.removeChild(temp);
-    }
-    box.classList.add('highlight');
-    toast.classList.add('show');
-    setTimeout(()=> box.classList.remove('highlight'), 700);
-    setTimeout(()=> toast.classList.remove('show'), 1600);
+  const btn = document.getElementById('hamburger-btn');
+  const links = document.getElementById('navlinks');
+  btn.addEventListener('click', ()=> links.classList.toggle('open'));
+  links.querySelectorAll('a').forEach(a=>{
+    a.addEventListener('click', ()=> links.classList.remove('open'));
   });
 })();
 
-/* ---------- Gratitude pop-up with star burst ---------- */
+/* ---------- Tap-to-copy account number + gratitude pop-up ---------- */
 (function(){
-  const btn = document.getElementById('given-btn');
+  const box = document.getElementById('account-copy');
+  const toast = document.getElementById('copy-toast');
   const modal = document.getElementById('gratitude-modal');
   const closeBtn = document.getElementById('modal-close-btn');
   const starPath = "M20 2 L24.5 14.5 L37 12 L27.5 21 L33 33 L20 26 L7 33 L12.5 21 L3 12 L15.5 14.5 Z";
@@ -730,14 +733,32 @@ async function fetchProgressPercent(){
     setTimeout(()=> layer.remove(), 1800);
   }
 
-  btn.addEventListener('click', ()=>{
-    spawnBurst();
-    modal.classList.add('open');
+  box.addEventListener('click', async ()=>{
+    const num = box.dataset.account;
+    try{
+      await navigator.clipboard.writeText(num);
+    }catch(e){
+      const temp = document.createElement('textarea');
+      temp.value = num;
+      document.body.appendChild(temp);
+      temp.select();
+      document.execCommand('copy');
+      document.body.removeChild(temp);
+    }
+    box.classList.add('highlight');
+    toast.classList.add('show');
+    setTimeout(()=> box.classList.remove('highlight'), 700);
+    setTimeout(()=> toast.classList.remove('show'), 1400);
+
+    setTimeout(()=>{
+      spawnBurst();
+      modal.classList.add('open');
+    }, 900);
   });
+
   closeBtn.addEventListener('click', ()=> modal.classList.remove('open'));
   modal.addEventListener('click', (e)=>{ if(e.target === modal) modal.classList.remove('open'); });
 })();
 </script>
 </body>
 </html>
-
