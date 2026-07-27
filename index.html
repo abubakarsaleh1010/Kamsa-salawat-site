@@ -216,14 +216,12 @@
   .copy-hint{font-size:0.7rem; color:rgba(244,239,226,0.4);}
   .toast{
     position:fixed; left:50%; bottom:40px; transform:translateX(-50%) translateY(20px);
-    background:var(--gold); color:var(--bg-deep);
-    padding:14px 28px; border-radius:16px; max-width:88vw;
+    background:var(--gold); color:var(--bg-deep); font-weight:700;
+    padding:12px 26px; border-radius:30px; font-size:0.85rem;
     opacity:0; pointer-events:none; transition:opacity .3s ease, transform .3s ease;
-    z-index:200; text-align:center; box-shadow:0 12px 30px rgba(0,0,0,0.35);
+    z-index:200; letter-spacing:0.03em;
   }
   .toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
-  .toast-main{ font-weight:800; font-size:0.92rem; letter-spacing:0.03em; display:flex; align-items:center; justify-content:center; gap:6px; }
-  .toast-sub{ font-weight:600; font-size:0.75rem; opacity:0.85; margin-top:3px; }
   .note{font-size:0.75rem; color:rgba(244,239,226,0.4); margin-top:18px; font-style:italic;}
 
   .faq-item{border-bottom:1px solid var(--line); padding:22px 0;}
@@ -503,10 +501,7 @@
   </div>
 </footer>
 
-<div class="toast" id="copy-toast">
-  <div class="toast-main">✓ Account number copied</div>
-  <div class="toast-sub">Open your bank app and paste to send</div>
-</div>
+<div class="toast" id="copy-toast">Copied!</div>
 
 <div class="modal-overlay" id="gratitude-modal">
   <div class="modal-card">
@@ -724,7 +719,7 @@ async function fetchProgressPercent(){
       el.setAttribute('viewBox','0 0 40 40');
       el.classList.add('burst-star');
       el.style.setProperty('--rot', (Math.random()>0.5?1:-1)*(180+Math.random()*360)+'deg');
-      el.style.setProperty('--dist', '-'+dist+'px');
+      el.style.setProperty ('--dist', '-'+dist+'px');
       el.style.setProperty('--dur', dur+'s');
       el.style.transform = `translate(-50%,-50%) rotate(${angle}deg)`;
       const path = document.createElementNS('http://www.w3.org/2000/svg','path');
@@ -751,12 +746,12 @@ async function fetchProgressPercent(){
     box.classList.add('highlight');
     toast.classList.add('show');
     setTimeout(()=> box.classList.remove('highlight'), 700);
-    setTimeout(()=> toast.classList.remove('show'), 2400);
+    setTimeout(()=> toast.classList.remove('show'), 1600);
 
     setTimeout(()=>{
       spawnBurst();
       modal.classList.add('open');
-    }, 1800);
+    }, 900);
   });
 
   closeBtn.addEventListener('click', ()=> modal.classList.remove('open'));
